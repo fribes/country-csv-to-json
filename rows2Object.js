@@ -3,7 +3,7 @@
 function rows2Object(arrayCountries) {
   const keys = arrayCountries.shift();
   const objCountries = arrayCountries.map(perCountry);
-  return objCountries;
+  return objCountries
 
   function perCountry(country) {
     const objCountry = keys.reduce((fields, field, index) => {

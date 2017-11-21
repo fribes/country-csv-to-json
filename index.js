@@ -7,7 +7,12 @@ const writeJSON = require('./writeJSON');
 main();
 
 async function main() {
-  const arrayCountries = await readCsv('country.csv');
-  const objCountries = rows2Object(arrayCountries);
-  await writeJSON(objCountries);
+  try {
+    const arrayCountries = await readCsv('country.csv');
+    const objCountries = rows2Object(arrayCountries);
+    await writeJSON(objCountries);
+    console.log('Done!');
+  } catch (err) {
+    console.error(err);
+  }
 }
