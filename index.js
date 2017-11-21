@@ -1,3 +1,5 @@
+'use strict';
+
 const fs = require('fs');
 const readline = require('readline');
 
@@ -9,18 +11,19 @@ const arrayCountries = [];
 
 lineReader.on('line', line => arrayCountries.push(line.split(',')));
 
-lineReader.on('close', toJson);
-
-function toJson() {
+lineReader.on('close', (...args) => {
   try {
-    keys = arrayCountries.shift();
-    objCountries = arrayCountries.map(perCountry);
-    write(objCountries);
-    console.log('Done!');
-  }
-  catch (err) {
+    toJson(...args);
+  } catch (err) {
     console.error(err);
   }
+});
+
+function toJson() {
+  const keys = arrayCountries.shift();
+  const objCountries = arrayCountries.map(perCountry);
+  write(objCountries);
+  console.log('Done!');
 
   function write(data) {
     fs.writeFile(
@@ -28,17 +31,16 @@ function toJson() {
       JSON.stringify(data, null, 2),
       'utf-8',
       err => {
-        if (err) throw( new Error(err));
+        if (err) throw new Error(err);
       }
     );
   }
 
   function perCountry(country) {
-    objCountry = keys.reduce((fields, field, index) => {
+    const objCountry = keys.reduce((fields, field, index) => {
       fields[field] = country[index];
       return fields;
     }, {});
     return objCountry;
   }
-
 }
