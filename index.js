@@ -13,17 +13,12 @@ lineReader.on('line', line => arrayCountries.push(line.split(',')));
 
 lineReader.on('close', (...args) => {
   try {
-    toJson(...args);
+    const objCountries = toObject(...args);
+    write(objCountries);
+    console.log('Done!');
   } catch (err) {
     console.error(err);
   }
-});
-
-function toJson() {
-  const keys = arrayCountries.shift();
-  const objCountries = arrayCountries.map(perCountry);
-  write(objCountries);
-  console.log('Done!');
 
   function write(data) {
     fs.writeFile(
@@ -35,6 +30,12 @@ function toJson() {
       }
     );
   }
+});
+
+function toObject() {
+  const keys = arrayCountries.shift();
+  const objCountries = arrayCountries.map(perCountry);
+  return objCountries
 
   function perCountry(country) {
     const objCountry = keys.reduce((fields, field, index) => {
